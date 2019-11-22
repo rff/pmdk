@@ -404,13 +404,33 @@ memcheck-summary-leaks:
 
 check:
 	@[ -z "$(BLACKLIST_TESTS)" ] || echo "Blacklisted tests: $(BLACKLIST_TESTS)"
+	@echo "Blacklisted tests (always print): $(BLACKLIST_TESTS)"
+	@echo "Blacklist file: $(BLACKLIST_FILE)"
+	@echo "Whitelisted tests: $(WHITELIST_TESTS)"
+	@echo "Local tests: $(LOCAL_TESTS)"
+	@echo "./RUNTESTS $(RUNTEST_OPTIONS) $(LOCAL_TESTS)"
 	@./RUNTESTS $(RUNTEST_OPTIONS) $(LOCAL_TESTS)
+	@echo "Blacklisted tests (always print): $(BLACKLIST_TESTS)"
+	@echo "Blacklist file: $(BLACKLIST_FILE)"
+	@echo "Whitelisted tests: $(WHITELIST_TESTS)"
+	@echo "Local tests: $(LOCAL_TESTS)"
+	@echo "./RUNTESTS $(RUNTEST_OPTIONS) $(LOCAL_TESTS)"
 	$(MAKE) check-remote-quiet-conditional
 	@echo "No failures."
 
 pycheck:
 	@[ -z "$(BLACKLIST_TESTS)" ] || echo "Blacklisted tests: $(BLACKLIST_TESTS)"
+	@echo "Blacklisted tests (always print): $(BLACKLIST_TESTS)"
+	@echo "Blacklist file: $(BLACKLIST_FILE)"
+	@echo "Whitelisted tests: $(WHITELIST_TESTS)"
+	@echo "Local tests: $(LOCAL_TESTS)"
+	@echo "./RUNTESTS.py $(subst nondebug,release,$(RUNTEST_OPTIONS)) -- $(TESTS)"
 	@./RUNTESTS.py $(subst nondebug,release,$(RUNTEST_OPTIONS)) -- $(TESTS)
+	@echo "Blacklisted tests (always print): $(BLACKLIST_TESTS)"
+	@echo "Blacklist file: $(BLACKLIST_FILE)"
+	@echo "Whitelisted tests: $(WHITELIST_TESTS)"
+	@echo "Local tests: $(LOCAL_TESTS)"
+	@echo "./RUNTESTS.py $(subst nondebug,release,$(RUNTEST_OPTIONS)) -- $(TESTS)"
 	@echo "No failures."
 
 check-remote-quiet-conditional:
