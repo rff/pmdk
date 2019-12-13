@@ -339,10 +339,18 @@ ifeq ("$(wildcard $(BLACKLIST_FILE))","")
 $(error Missing blacklist file: $(BLACKLIST_FILE))
 endif
 	BLACKLIST_TESTS := $(shell cat $(BLACKLIST_FILE))
-	TESTS := $(filter-out $(BLACKLIST_TESTS),$(TESTS))
-	LOCAL_TESTS := $(filter-out $(BLACKLIST_TESTS),$(LOCAL_TESTS))
-	REMOTE_TESTS := $(filter-out $(BLACKLIST_TESTS),$(REMOTE_TESTS))
-	TESTS_BUILD := $(filter-out $(BLACKLIST_TESTS),$(TESTS_BUILD))
+	TESTS := $(filter-out $(BLACKLIST_TESTS),$(TESTS)) \
+	         $(filter $(WHITELIST_TESTS),$(TESTS))
+	TESTS := $(sort $(TESTS))
+	LOCAL_TESTS := $(filter-out $(BLACKLIST_TESTS),$(LOCAL_TESTS)) \
+	               $(filter $(WHITELIST_TESTS),$(LOCAL_TESTS))
+	LOCAL_TESTS := $(sort $(LOCAL_TESTS))
+	REMOTE_TESTS := $(filter-out $(BLACKLIST_TESTS),$(REMOTE_TESTS)) \
+	                $(filter $(WHITELIST_TESTS),$(REMOTE_TESTS))
+	REMOTE_TESTS := $(sort $(REMOTE_TESTS))
+	TESTS_BUILD := $(filter-out $(BLACKLIST_TESTS),$(TESTS_BUILD)) \
+	         $(filter $(WHITELIST_TESTS),$(TESTS_BUILD))
+	TESTS_BUILD := $(sort $(TESTS_BUILD))
 endif
 
 all     : TARGET = all
