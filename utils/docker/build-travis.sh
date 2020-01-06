@@ -70,16 +70,35 @@ fi
 # Check if we are running on a CI (Travis or GitHub Actions)
 [ -n "$GITHUB_ACTIONS" -o -n "$TRAVIS" ] && CI_RUN="YES" || CI_RUN="NO"
 
+if [[ -n "$TRAVIS" ]] ; then
+	# docker on travis + ppc64le runs inside and LXD container and fail
+	# when using -i or -t
+	if [[ "$CI_CPU_ARCH" == ppc64le ]] ; then
+		TTY=''
+	else
+		TTY='-it'
+	fi
+elif [[ -n "$GITHUB_ACTIONS" ]] ; then
+	TTY='-i'
+else
+	TTY='-it'
+fi
+
 WORKDIR=/pmdk
 SCRIPTSDIR=$WORKDIR/utils/docker
-
-[ ! $GITHUB_ACTIONS ] && TTY='-t' || TTY=''
 
 # Run a container with
 #  - environment variables set (--env)
 #  - host directory containing PMDK source mounted (-v)
+#  - a tmpfs /tmp with the necessary size and permissions (--tmpfs)*
 #  - working directory set (-w)
-docker run --rm --privileged=true --name=$containerName -i $TTY \
+#
+# * We need a tmpfs /tmp inside docker but we cannot run it with --privileged
+#   and do it from inside, so we do using this docker-run option.
+#   By default --tmpfs add nosuid,nodev,noexec to the mount flags, we don't
+#   want that and just to make sure we add the usually default rw,relatime just
+#   in case docker change the defaults.
+docker --debug run --rm --name=$containerName $TTY \
 	$DNS_SETTING \
 	$ci_env \
 	--env http_proxy=$http_proxy \
@@ -111,6 +130,7 @@ docker run --rm --privileged=true --name=$containerName -i $TTY \
 	--env CI_RUN=$CI_RUN \
 	--env SRC_CHECKERS=$SRC_CHECKERS \
 	$ndctl_enable \
+	--tmpfs /tmp:rw,relatime,suid,dev,exec,size=6G \
 	-v $HOST_WORKDIR:$WORKDIR \
 	-v /etc/localtime:/etc/localtime \
 	-w $SCRIPTSDIR \
