@@ -70,6 +70,9 @@ fi
 # Check if we are running on a CI (Travis or GitHub Actions)
 [ -n "$GITHUB_ACTIONS" -o -n "$TRAVIS" ] && CI_RUN="YES" || CI_RUN="NO"
 
+# We have a blacklist only for ppc64le arch
+if [[ "$CI_CPU_ARCH" == ppc64le ]] ; then BLACKLIST_FILE=../../utils/docker/ppc64le.blacklist; fi
+
 if [[ -n "$TRAVIS" ]] ; then
 	# docker on travis + ppc64le runs inside and LXD container and fail
 	# when using -i or -t
@@ -129,6 +132,7 @@ docker --debug run --rm --name=$containerName $TTY \
 	--env GITHUB_REPO=$GITHUB_REPO \
 	--env CI_RUN=$CI_RUN \
 	--env SRC_CHECKERS=$SRC_CHECKERS \
+	--env BLACKLIST_FILE=$BLACKLIST_FILE \
 	$ndctl_enable \
 	--tmpfs /tmp:rw,relatime,suid,dev,exec,size=6G \
 	-v $HOST_WORKDIR:$WORKDIR \
