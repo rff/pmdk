@@ -177,6 +177,7 @@ RPM_SPEC_FILE=$PACKAGE_SOURCE/$PACKAGE_NAME.spec
 MAGIC_INSTALL=$PACKAGE_SOURCE/utils/magic-install.sh
 MAGIC_UNINSTALL=$PACKAGE_SOURCE/utils/magic-uninstall.sh
 OLDPWD=$PWD
+RPM_EXCLUSIVE_ARCH=$(uname -m)
 
 [ -d $WORKING_DIR ] || mkdir -v $WORKING_DIR
 [ -d $OUT_DIR ] || mkdir $OUT_DIR
@@ -222,6 +223,7 @@ sed -e "s/__VERSION__/$PACKAGE_VERSION/g" \
 	-e "s/__MAKE_INSTALL_FDUPES__/$RPM_MAKE_INSTALL/g" \
 	-e "s/__LIBFABRIC_MIN_VER__/$LIBFABRIC_MIN_VERSION/g" \
 	-e "s/__NDCTL_MIN_VER__/$NDCTL_MIN_VERSION/g" \
+	-e "s/__EXCLUSIVE_ARCH__/$RPM_EXCLUSIVE_ARCH/g" \
 	$OLDPWD/$SCRIPT_DIR/pmdk.spec.in > $RPM_SPEC_FILE
 
 if [ "$DISTRO" = "SLES_like" ]
