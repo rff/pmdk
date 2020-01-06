@@ -156,4 +156,19 @@ done
 
 # Getting here means rebuilding the Docker image is not required.
 # Pull the image from Docker Hub.
-docker pull ${DOCKERHUB_REPO}:1.8-${OS}-${OS_VER}
+imageName=${DOCKERHUB_REPO}:1.8-${OS}-${OS_VER}
+docker pull ${imageName}
+
+# Docker don't error out if the image is the wrong architecture, so we need to
+# check for ourselfs and build one if necessary.
+image_arch=$(docker image inspect --format='{{.Architecture}}' ${imageName})
+if [[ "$image_arch" != "$TRAVIS_CPU_ARCH" ]]
+then
+	echo "No image for the proper architecture. Docker image $image_arch, Travis cpu arch $TRAVIS_CPU_ARCH."
+	echo "Rebuilding the Docker image for the Dockerfile.$OS-$OS_VER"
+	docker image rm ${imageName}
+	pushd $images_dir_name
+	./build-image.sh ${OS}-${OS_VER}
+	popd
+	exit 0
+fi
