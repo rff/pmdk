@@ -46,9 +46,10 @@ git config user.name "test package"
 git tag -a 1.4.99 -m "1.4" HEAD~1 || true
 
 # Build all and run tests
+JOBS=$(nproc)
 cd $WORKDIR
-export PCHECK_OPTS=-j2
-make -j2 $PACKAGE_MANAGER
+export PCHECK_OPTS=-j${JOBS}
+make -j${JOBS} $PACKAGE_MANAGER
 
 # Install packages
 if [[ "$PACKAGE_MANAGER" == "dpkg" ]]; then
@@ -62,7 +63,7 @@ fi
 
 # Compile and run standalone test
 cd $WORKDIR/utils/docker/test_package
-make LIBPMEMOBJ_MIN_VERSION=1.4
+make -j${JOBS} LIBPMEMOBJ_MIN_VERSION=1.4
 ./test_package testfile1
 
 # Use pmreorder installed in the system

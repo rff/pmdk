@@ -49,8 +49,8 @@ unzip $libfabric_tarball
 cd $libfabric_dir
 ./autogen.sh
 ./configure --prefix=/usr --enable-sockets
-make -j2
-make install
+make -j$(nproc)
+make -j$(nproc) install
 
 cd ..
 rm -f ${libfabric_tarball}

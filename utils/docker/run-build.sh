@@ -41,14 +41,15 @@ set -e
 ./prepare-for-build.sh
 
 # Build all and run tests
+JOBS=$(nproc)
 cd $WORKDIR
-make check-license
-make cstyle
-make -j2
-make -j2 test
-make -j2 pcheck TEST_BUILD=$TEST_BUILD
-make -j2 pycheck
-make DESTDIR=/tmp source
+make -j${JOBS} check-license
+make -j${JOBS} cstyle
+make -j${JOBS}
+make -j${JOBS} test
+make -j${JOBS} pcheck TEST_BUILD=$TEST_BUILD
+make -j${JOBS} pycheck
+make -j${JOBS} DESTDIR=/tmp source
 
 # Create PR with generated docs
 if [[ "$AUTO_DOC_UPDATE" == "1" ]]; then
