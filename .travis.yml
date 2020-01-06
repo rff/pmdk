@@ -22,6 +22,7 @@ env:
     - PMDK_CXX=g++
     - REMOTE_TESTS=1
     - VALGRIND=1
+    - ppc64le__BLACKLIST_FILE=../../utils/docker/ppc64le.blacklist
   matrix:
     - COVERAGE=1 FAULT_INJECTION=1 TEST_BUILD=debug
     - OS=fedora OS_VER=31 PMDK_CC=clang PMDK_CXX=clang++ TEST_BUILD=nondebug AUTO_DOC_UPDATE=1
@@ -43,6 +44,7 @@ matrix:
     - env: MAKE_PKG=1 EXPERIMENTAL=y REMOTE_TESTS=0 VALGRIND=0 NDCTL_ENABLE=n PMDK_CC=clang PMDK_CXX=clang++
 
 before_install:
+  - eval export "$(export -p | sed -n "s/^declare -x ${TRAVIS_CPU_ARCH}__//p")"
   - echo $TRAVIS_COMMIT_RANGE
   - export HOST_WORKDIR=`pwd`
   - cd utils/docker
