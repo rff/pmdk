@@ -38,18 +38,23 @@ env:
 
 before_install:
   - eval export "$(export -p | sed -n "s/^declare -x ${TRAVIS_CPU_ARCH}__//p")"
+  - docker image ls
   - echo $TRAVIS_COMMIT_RANGE
   - export HOST_WORKDIR=`pwd`
   - export GITHUB_REPO=pmem/pmdk
   - export DOCKERHUB_REPO=pmem/pmdk
   - cd utils/docker
   - ./pull-or-rebuild-image.sh
+  - docker image ls
   - if [[ -f push_image_to_repo_flag ]]; then PUSH_THE_IMAGE=1; fi
   - if [[ -f skip_build_package_check ]]; then export SKIP_CHECK=1; fi
   - rm -f push_image_to_repo_flag skip_build_package_check
+  - export -p | grep -e VALGRIND -e BLACKLIST
 
 script:
+  - docker image ls
   - ./build-travis.sh
+  - export -p | grep -e VALGRIND -e BLACKLIST
 
 after_success:
   - if [[ $PUSH_THE_IMAGE -eq 1 ]]; then images/push-image.sh $OS-$OS_VER; fi

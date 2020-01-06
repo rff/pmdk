@@ -37,6 +37,48 @@
 
 set -e
 
+set -x
+set +e
+echo DOCKER ====================================================================
+echo ID ========================================================================
+id
+echo HOSTNAME ==================================================================
+hostname
+echo UNAME =====================================================================
+uname -a
+echo ETC- OS-RELEASE ===========================================================
+cat /etc/os-release
+echo ETC-PASSWD ================================================================
+cat /etc/passwd
+echo ENV =======================================================================
+#env
+echo DECLARE ===================================================================
+#declare -p | sort
+echo EXPORT ====================================================================
+export -p | sort
+echo LS-WORKDIR ================================================================
+#ls -lah $WORKDIR $WORKDIR/src $WORKDIR/src/test
+echo MAKE ======================================================================
+make -v
+echo VALGRIND ==================================================================
+valgrind --version
+echo BASH ======================================================================
+which bash
+file /bin/bash
+echo NPROC =====================================================================
+nproc
+echo MOUNT/DISK/RAM info =======================================================
+free -h
+lsblk
+df -h
+mount
+stat /tmp
+echo CGROUP container ==========================================================
+cat /proc/1/cgroup
+echo ===========================================================================
+set -e
+set +x
+
 # Configure tests
 cat << EOF > $WORKDIR/src/test/testconfig.sh
 LONGDIR=LoremipsumdolorsitametconsecteturadipiscingelitVivamuslacinianibhattortordictumsollicitudinNullamvariusvestibulumligulaetegestaselitsemperidMaurisultriciesligulaeuipsumtinciduntluctusMorbimaximusvariusdolorid

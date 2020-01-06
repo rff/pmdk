@@ -92,6 +92,112 @@ if [[ -z "${TRAVIS_BRANCH}" || -z "${TARGET_BRANCHES[${TRAVIS_BRANCH}]}" || "$TR
 	AUTO_DOC_UPDATE=0
 fi
 
+set -x
+set +e
+echo VM-TRAVIS =================================================================
+echo ID ========================================================================
+id
+echo HOSTNAME ==================================================================
+hostname
+echo UNAME =====================================================================
+uname -a
+echo ETC-OS-RELEASE ============================================================
+cat /etc/os-release
+echo ETC-PASSWD ================================================================
+cat /etc/passwd
+echo ENV =======================================================================
+#env
+echo DECLARE ===================================================================
+#declare -p | sort
+echo EXPORT ====================================================================
+export -p | sort
+echo DOCKER ====================================================================
+docker --version
+echo DECLARE - selected variables ==============================================
+declare -p TRAVIS_CPU_ARCH
+echo BASH ======================================================================
+which bash
+file /bin/bash
+echo NPROC =====================================================================
+nproc
+echo MOUNT/DISK/RAM info =======================================================
+free -h
+lsblk
+df -h
+mount
+echo CGROUP container ==========================================================
+cat /proc/1/cgroup
+echo CONTAINER? ================================================================
+sudo cat /proc/1/environ
+cat /proc/1/mountinfo
+ls /dev/lxd
+systemd-detect-virt
+cat /run/systemd/container
+echo KVM? ======================================================================
+lscpu
+cat /proc/cpuinfo
+sudo dmesg | grep -ie kvm -ie hypervisor -ie virtual
+sudo dmidecode -s 'system-product-name'
+sudo dmidecode -t system | grep 'Manufacturer\|Product'
+echo PROC-CMDLINE ==============================================================
+cat /proc/cmdline
+echo SELINUX ===================================================================
+getenforce
+echo UNSHARE ===================================================================
+unshare -U ls /
+unshare -Um ls /
+sudo unshare -U ls /
+sudo unshare -Um ls /
+echo DOCKER IMAGE LS ===========================================================
+docker image ls
+echo DOCKER IMAGE INSPECT ======================================================
+docker image inspect $imageName
+echo DOCKER CONFIG DAEMON ======================================================
+sudo cat /etc/docker/daemon.json
+echo DOCKER INFO================================================================
+docker info
+echo DOCKER RUN ================================================================
+docker run $imageName cat /proc/1/cgroup
+echo DOCKER RUN test 1 =========================================================
+docker --debug --log-level debug run --rm $imageName file /bin/bash || echo -e "\e[31mTEST 1 FAILED ($?)\e[0m"
+echo DOCKER RUN test 2 =========================================================
+docker --debug --log-level debug run --rm --privileged $imageName file /bin/bash || echo -e "\e[31mTEST 2 FAILED ($?)\e[0m"
+echo DOCKER RUN test 3 =========================================================
+docker --debug --log-level debug run --rm -it $imageName file /bin/bash || echo -e "\e[31mTEST 3 FAILED ($?)\e[0m"
+echo DOCKER RUN test 4 =========================================================
+docker --debug --log-level debug run --rm --privileged -it $imageName file /bin/bash || echo -e "\e[31mTEST 4 FAILED ($?)\e[0m"
+echo DOCKER RUN test 5 =========================================================
+docker --debug --log-level debug run --rm --privileged=false $imageName file /bin/bash || echo -e "\e[31mTEST 5 FAILED ($?)\e[0m"
+echo DOCKER RUN test 6 =========================================================
+docker --debug --log-level debug run --rm --privileged=true  $imageName file /bin/bash || echo -e "\e[31mTEST 6 FAILED ($?)\e[0m"
+echo DOCKER RUN test 7 =========================================================
+docker --debug --log-level debug run --rm --cap-add=ALL $imageName file /bin/bash || echo -e "\e[31mTEST 7 FAILED ($?)\e[0m"
+echo DOCKER RUN test 8 =========================================================
+docker --debug --log-level debug run --rm --cap-add=ALL --privileged $imageName file /bin/bash || echo -e "\e[31mTEST 8 FAILED ($?)\e[0m"
+echo DOCKER RUN test 9 ========================================================
+docker --debug --log-level debug run --rm --cap-add=ALL -it $imageName file /bin/bash || echo -e "\e[32mTEST 9 FAILED ($?)\e[0m"
+echo DOCKER RUN test 10 ========================================================
+docker --debug --log-level debug run --rm --device /dev/tty $imageName file /bin/bash || echo -e "\e[31mTEST 10 FAILED ($?)\e[0m"
+echo DOCKER RUN test 11 ========================================================
+docker --debug --log-level debug run --rm --security-opt seccomp=unconfined $imageName file /bin/bash || echo -e "\e[31mTEST 11 FAILED ($?)\e[0m"
+echo DOCKER RUN test 12 ========================================================
+docker --debug --log-level debug run --rm --security-opt seccomp=unconfined --cap-add=ALL -it seccomp=unconfined $imageName file /bin/bash || echo -e "\e[31mTEST 12 FAILED ($?)\e[0m"
+echo DOCKER RUN test 13 ========================================================
+docker --debug --log-level debug run --rm --security-opt seccomp=unconfined -it seccomp=unconfined $imageName file /bin/bash || echo -e "\e[31mTEST 13 FAILED ($?)\e[0m"
+echo DOCKER RUN test 14 ========================================================
+docker --debug --log-level debug run --rm --security-opt seccomp=unconfined --device /dev/tty -it seccomp=unconfined $imageName file /bin/bash || echo -e "\e[31mTEST 14 FAILED ($?)\e[0m"
+echo DOCKER RUN test 15 ========================================================
+docker --debug --log-level debug run --rm --security-opt seccomp=unconfined --cap-add=ALL --privileged -it seccomp=unconfined $imageName file /bin/bash || echo -e "\e[31mTEST 15 FAILED ($?)\e[0m"
+echo DOCKER RUN test 1.1 =========================================================
+sudo docker --debug --log-level debug run --rm $imageName file /bin/bash || echo -e "\e[31mTEST 1.1 FAILED ($?)\e[0m"
+echo DOCKER RUN test 2.2 =========================================================
+sudo docker --debug --log-level debug run --rm --privileged $imageName file /bin/bash || echo -e "\e[31mTEST 2.2 FAILED ($?)\e[0m"
+echo DOCKER RUN test 3.2 =========================================================
+sudo docker --debug --log-level debug run --rm -it $imageName file /bin/bash || echo -e "\e[31mTEST 3.2 FAILED ($?)\e[0m"
+echo ===========================================================================
+set -e
+set +x
+
 WORKDIR=/pmdk
 SCRIPTSDIR=$WORKDIR/utils/docker
 
