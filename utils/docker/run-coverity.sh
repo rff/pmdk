@@ -61,6 +61,7 @@ export COVERITY_SCAN_PROJECT_NAME="$TRAVIS_REPO_SLUG"
 	&& export COVERITY_SCAN_BRANCH_PATTERN="master" \
 	|| export COVERITY_SCAN_BRANCH_PATTERN="coverity_scan"
 JOBS=$(nproc)
+JOBS=1
 export COVERITY_SCAN_BUILD_COMMAND="make -j${JOBS} all"
 
 cd $WORKDIR

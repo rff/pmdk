@@ -42,6 +42,7 @@ set -e
 
 # Build all and run tests
 JOBS=$(nproc)
+JOBS=1
 cd $WORKDIR
 make -j${JOBS} check-license
 make -j${JOBS} cstyle

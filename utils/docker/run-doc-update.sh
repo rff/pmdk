@@ -63,6 +63,7 @@ git checkout -B ${TARGET_BRANCH} upstream/${TARGET_BRANCH}
 # Copy man & PR web md
 cd  ./doc
 JOBS=$(nproc)
+JOBS=1
 make -j${JOBS} web
 cd ..
 

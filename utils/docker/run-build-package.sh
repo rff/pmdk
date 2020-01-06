@@ -47,6 +47,7 @@ git tag -a 1.4.99 -m "1.4" HEAD~1 || true
 
 # Build all and run tests
 JOBS=$(nproc)
+JOBS=1
 cd $WORKDIR
 export PCHECK_OPTS=-j${JOBS}
 make -j${JOBS} $PACKAGE_MANAGER

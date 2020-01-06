@@ -48,6 +48,7 @@ export UT_VALGRIND_SKIP_PRINT_MISMATCHED=1
 
 # Build all and run tests
 JOBS=$(nproc)
+JOBS=1
 cd $WORKDIR
 make -j${JOBS} COVERAGE=1
 make -j${JOBS} test COVERAGE=1
