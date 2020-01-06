@@ -10,9 +10,6 @@
 
 set -e
 
-# Mount filesystem for tests
-echo $USERPASS | sudo -S mount -t tmpfs none /tmp -osize=6G
-
 # Some travis-ci instances have ID conflics between the VM and docker users. So
 # let's make sure we fix any ownership mismatch from the binded workdir.
 echo ${USERPASS} | sudo -S chown -R ${USER}: ${WORKDIR}

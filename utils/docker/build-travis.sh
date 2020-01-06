@@ -73,8 +73,15 @@ SCRIPTSDIR=$WORKDIR/utils/docker
 # Run a container with
 #  - environment variables set (--env)
 #  - host directory containing PMDK source mounted (-v)
+#  - a tmpfs /tmp with the necessary size and permissions (--tmpfs)*
 #  - working directory set (-w)
-docker run --rm --privileged=true --name=$containerName -i $TTY \
+#
+# * We need a tmpfs /tmp inside docker but we cannot run it with --privileged
+#   and do it from inside, so we do using this docker-run option.
+#   By default --tmpfs add nosuid,nodev,noexec to the mount flags, we don't
+#   want that and just to make sure we add the usually default rw,relatime just
+#   in case docker change the defaults.
+docker --debug run --rm --name=$containerName \
 	$DNS_SETTING \
 	$ci_env \
 	--env http_proxy=$http_proxy \
@@ -103,6 +110,7 @@ docker run --rm --privileged=true --name=$containerName -i $TTY \
 	--env FAULT_INJECTION=$FAULT_INJECTION \
 	--env GITHUB_REPO=$GITHUB_REPO \
 	$ndctl_enable \
+	--tmpfs /tmp:rw,relatime,suid,dev,exec,size=6G \
 	-v $HOST_WORKDIR:$WORKDIR \
 	-v /etc/localtime:/etc/localtime \
 	-w $SCRIPTSDIR \
