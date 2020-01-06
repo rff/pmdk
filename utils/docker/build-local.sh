@@ -96,6 +96,7 @@ docker run --name=$containerName \
 	--env EXPERIMENTAL=$EXPERIMENTAL \
 	--env SCRIPTSDIR=$SCRIPTSDIR \
 	--env KEEP_TEST_CONFIG=$KEEP_TEST_CONFIG \
+	--env BLACKLIST_FILE=$BLACKLIST_FILE \
 	$ndctl_enable \
 	--tmpfs /tmp:rw,relatime,suid,dev,exec,size=6G \
 	-v $HOST_WORKDIR:$WORKDIR \

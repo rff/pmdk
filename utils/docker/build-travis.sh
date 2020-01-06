@@ -109,6 +109,7 @@ docker --debug run --rm --name=$containerName \
 	--env COVERITY_SCAN_NOTIFICATION_EMAIL=$COVERITY_SCAN_NOTIFICATION_EMAIL \
 	--env FAULT_INJECTION=$FAULT_INJECTION \
 	--env GITHUB_REPO=$GITHUB_REPO \
+	--env BLACKLIST_FILE=$BLACKLIST_FILE \
 	$ndctl_enable \
 	--tmpfs /tmp:rw,relatime,suid,dev,exec,size=6G \
 	-v $HOST_WORKDIR:$WORKDIR \
