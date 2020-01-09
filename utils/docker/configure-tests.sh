@@ -46,6 +46,7 @@ NON_PMEM_FS_DIR=/tmp
 PMEM_FS_DIR=/tmp
 PMEM_FS_DIR_FORCE_PMEM=1
 TEST_BUILD="debug nondebug"
+TEST_TIMEOUT=9m
 ENABLE_SUDO_TESTS=y
 TM=1
 EOF
@@ -118,7 +119,7 @@ config = {
 	'fs': 'all',
 	'fs_dir_force_pmem': 0,
 	'keep_going': False,
-	'timeout': '3m',
+	'timeout': '9m',
 	'build': ['debug', 'release'],
 	'force_enable': None,
    }
