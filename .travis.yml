@@ -20,6 +20,7 @@ env:
     - PMDK_CXX=g++
     - REMOTE_TESTS=1
     - VALGRIND=1
+    - ppc64le__REMOTE_TESTS=0
     - ppc64le__VALGRIND=0
     - ppc64le__BLACKLIST_FILE=../../utils/docker/ppc64le.blacklist
   matrix:
