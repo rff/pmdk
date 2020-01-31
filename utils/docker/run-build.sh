@@ -40,6 +40,10 @@ set -e
 # Prepare build environment
 ./prepare-for-build.sh
 
+CHECK_RESULT=ok
+PCHECK_RESULT=ok
+PYCHECK_RESULT=ok
+
 # Build all and run tests
 JOBS=$(nproc)
 JOBS=1
@@ -48,8 +52,16 @@ make -j${JOBS} check-license
 make -j${JOBS} cstyle
 make -j${JOBS}
 make -j${JOBS} test
-make -j${JOBS} pcheck TEST_BUILD=$TEST_BUILD
-make -j${JOBS} pycheck
+make -j${JOBS} pcheck TEST_BUILD=$TEST_BUILD ||  PCHECK_RESULT=fail
+make -j${JOBS} check TEST_BUILD=$TEST_BUILD  ||   CHECK_RESULT=fail
+make -j${JOBS} pycheck                       || PYCHECK_RESULT=fail
+
+echo " pcheck=$PCHECK_RESULT"
+echo "  check=$CHECK_RESULT"
+echo "pycheck=$PYCHECK_RESULT"
+
+[[ $CHECK_RESULT == ok && $PCHECK_RESULT == ok && $PYCHECK_RESULT == ok ]] || exit 1
+
 make -j${JOBS} DESTDIR=/tmp source
 
 # Create PR with generated docs

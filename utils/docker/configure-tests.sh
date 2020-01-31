@@ -91,6 +91,9 @@ TEST_BUILD="debug nondebug"
 TEST_TIMEOUT=9m
 ENABLE_SUDO_TESTS=y
 TM=1
+KEEP_GOING=y
+CLEAN_FAILED=y
+
 EOF
 
 # Configure remote tests
@@ -160,7 +163,7 @@ config = {
 	'test_type': 'check',
 	'fs': 'all',
 	'fs_dir_force_pmem': 0,
-	'keep_going': False,
+	'keep_going': True,
 	'timeout': '9m',
 	'build': ['debug', 'release'],
 	'force_enable': None,
