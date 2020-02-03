@@ -22,10 +22,12 @@ libpmempool_transform
 magic
 obj_action
 obj_basic_integration
+obj_defrag_advanced
 obj_mem
 obj_memcheck
 obj_memcheck_register
 obj_persist_count
+obj_recovery
 obj_tx_add_range
 obj_tx_add_range_direct
 obj_ulog_size
