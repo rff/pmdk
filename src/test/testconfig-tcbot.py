@@ -36,16 +36,27 @@ testdir = pathlib.Path('/mnt/pmem/raoni-pmdk-test-dir')
 testdir.mkdir(parents=True, exist_ok=True)
 testdir = str(testdir)
 
+# XXX: Commented config lines are the ones we changed from the default config
+# for travis.
 config = {
   'unittest_log_level': 1,
-  'pmem_fs_dir': testdir,
-  'non_pmem_fs_dir': testdir,
+  'cacheline_fs_dir': testdir,
+  'force_cacheline': True,
+  'page_fs_dir': testdir,
+  # 'force_page': False,
+  'force_page': True,
+  'byte_fs_dir': testdir,
+  'force_byte': True,
   'tm': True,
   'test_type': 'check',
-  'build': ['debug', 'release'],
-  'fs': 'all',
+  'granularity': 'all',
+  # 'fs_dir_force_pmem': 0,
+  'fs_dir_force_pmem': 1,
+  # 'keep_going': False,
   'keep_going': True,
   'timeout': '3m',
+  'build': ['debug', 'release'],
   'force_enable': None,
-  'fs_dir_force_pmem': 1,
+  'device_dax_path': [],
+  'fail_on_skip': False
 }

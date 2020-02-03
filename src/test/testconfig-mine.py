@@ -54,7 +54,63 @@ config = {
     #
 
     # 'unittest_log_level': 1,
-    'unittest_log_level': 0,
+    'unittest_log_level': 1,
+
+    #
+    # For tests that require filesystem with page granularity, set the
+    # path to a directory on a filesystem with such granularity.
+    # This line may stay commented out if there's no such filesystem
+    # available on your system.
+    #
+
+    # 'page_fs_dir': '/tmp',
+    'page_fs_dir': testdir,
+
+    #
+    # Enforce that the library will act in accordance with
+    # page granularity, even if the underlying filesystem is not page
+    # granular.
+    #
+
+    'force_page': False,
+
+    #
+    # For tests that require filesystem with cache line granularity, set
+    # the path to a directory on a filesystem with such granularity.
+    # This line may stay commented out if there's no such filesystem
+    # available on your system.
+    #
+
+    # 'cacheline_fs_dir': '/mnt/pmem',
+    'cacheline_fs_dir': testdir,
+
+    #
+    # Enforce that the library will act in accordance with
+    # cache line granularity, even if the underlying filesystem is not
+    # cache line granular.
+    #
+
+    # 'force_cacheline': False,
+    'force_cacheline': True,
+
+    #
+    # For tests that require filesystem with byte granularity, set
+    # the path to a directory on a filesystem with such granularity.
+    # This line may stay commented out if there's no such filesystem
+    # available on your system.
+    #
+
+    # 'byte_fs_dir': '/mnt/pmem',
+    'byte_fs_dir': testdir,
+
+    #
+    # Enforce that the library will act in accordance with
+    # byte granularity, even if the underlying filesystem is not byte
+    # granular.
+    #
+
+    # 'force_byte': False,
+    'force_byte': True,
 
     #
     # For tests that require true persistent memory, set the path to
@@ -75,6 +131,13 @@ config = {
 
     # 'non_pmem_fs_dir': '/tmp',
     'non_pmem_fs_dir': testdir,
+
+    #
+    # Set filesystem type to be run:
+    # pmem, non-pmem, any, none, all (default)
+    #
+
+    'fs': 'all',
 
     #
     # To display execution time of each test
@@ -100,11 +163,11 @@ config = {
     'build': ['debug', 'release'],
 
     #
-    # Set filesystem type to be run:
-    # pmem, non-pmem, any, none, all (default)
+    # Set filesystem granularity to be run:
+    # page, cacheline, byte, none, all (default)
     #
 
-    'fs': 'all',
+    'granularity': 'all',
 
     #
     # If keep_going is set to True, execution continues despite test failures.
@@ -112,6 +175,12 @@ config = {
 
     # 'keep_going': False,
     'keep_going': True,
+
+    #
+    # Skips will be treated as Fails if set to True
+    #
+
+    'fail_on_skip': False,
 
     #
     # Set timeout
