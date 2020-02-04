@@ -21,8 +21,8 @@ env:
     - REMOTE_TESTS=1
     - VALGRIND=1
     - ppc64le__VALGRIND=0
-    - ppc64le__BLACKLIST_FILE=all.blacklist
-    - ppc64le__WHITELIST_TESTS=arch_flags
+#    - ppc64le__BLACKLIST_FILE=all.blacklist
+#    - ppc64le__WHITELIST_TESTS=arch_flags
   matrix:
     - COVERAGE=1 FAULT_INJECTION=1 TEST_BUILD=debug
     - FAULT_INJECTION=1 TEST_BUILD=debug
