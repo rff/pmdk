@@ -20,7 +20,7 @@ env:
     - PMDK_CXX=g++
     - REMOTE_TESTS=1
     - VALGRIND=1
-    - ppc64le__VALGRIND=0
+#    - ppc64le__VALGRIND=0
 #    - ppc64le__BLACKLIST_FILE=all.blacklist
 #    - ppc64le__WHITELIST_TESTS=arch_flags
   matrix:
