@@ -1,8 +1,8 @@
 os: linux
 dist: bionic
 arch:
-  - amd64
   - ppc64le
+  - amd64
 
 sudo: required
 
@@ -24,16 +24,23 @@ env:
     - VALGRIND=1
   matrix:
     - COVERAGE=1 FAULT_INJECTION=1 TEST_BUILD=debug
-#    - FAULT_INJECTION=1 TEST_BUILD=debug
-#    - FAULT_INJECTION=1 TEST_BUILD=nondebug
-#    - PMDK_CC=clang PMDK_CXX=clang++ TEST_BUILD=debug
-#    - PMDK_CC=clang PMDK_CXX=clang++ TEST_BUILD=nondebug
-#    - OS=fedora OS_VER=31 PMDK_CC=clang PMDK_CXX=clang++ TEST_BUILD=debug
-#    - OS=fedora OS_VER=31 PMDK_CC=clang PMDK_CXX=clang++ TEST_BUILD=nondebug AUTO_DOC_UPDATE=1
-#    - MAKE_PKG=1 EXPERIMENTAL=y REMOTE_TESTS=0 VALGRIND=0 NDCTL_ENABLE=n PUSH_IMAGE=1
-#    - MAKE_PKG=1 EXPERIMENTAL=y REMOTE_TESTS=0 VALGRIND=0 PUSH_IMAGE=1 OS=fedora OS_VER=31
-#    - MAKE_PKG=1 EXPERIMENTAL=y REMOTE_TESTS=0 VALGRIND=0 NDCTL_ENABLE=n PMDK_CC=clang PMDK_CXX=clang++
-#    - COVERITY=1
+
+# XXX: The jobs which are explicitly included inherit the first value of the
+# expansion keys defined. In this case the only expansion key with more than
+# one entry is the `arch:` key, and that is why ppc64le is first, to save some
+# space here and not have to define `arch:` for each entry.
+matrix:
+  include:
+    - env: FAULT_INJECTION=1 TEST_BUILD=debug
+    - env: FAULT_INJECTION=1 TEST_BUILD=nondebug
+    - env: PMDK_CC=clang PMDK_CXX=clang++ TEST_BUILD=debug
+    - env: PMDK_CC=clang PMDK_CXX=clang++ TEST_BUILD=nondebug
+    - env: OS=fedora OS_VER=31 PMDK_CC=clang PMDK_CXX=clang++ TEST_BUILD=debug
+    - env: OS=fedora OS_VER=31 PMDK_CC=clang PMDK_CXX=clang++ TEST_BUILD=nondebug AUTO_DOC_UPDATE=1
+    - env: MAKE_PKG=1 EXPERIMENTAL=y REMOTE_TESTS=0 VALGRIND=0 NDCTL_ENABLE=n PUSH_IMAGE=1
+    - env: MAKE_PKG=1 EXPERIMENTAL=y REMOTE_TESTS=0 VALGRIND=0 PUSH_IMAGE=1 OS=fedora OS_VER=31
+    - env: MAKE_PKG=1 EXPERIMENTAL=y REMOTE_TESTS=0 VALGRIND=0 NDCTL_ENABLE=n PMDK_CC=clang PMDK_CXX=clang++
+    - env: COVERITY=1
 
 before_install:
   - echo $TRAVIS_COMMIT_RANGE
