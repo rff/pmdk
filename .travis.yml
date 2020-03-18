@@ -60,3 +60,5 @@ script:
 after_success:
   - source ./set-vars.sh
   - if [[ -f $CI_FILE_PUSH_IMAGE_TO_REPO ]]; then ./images/push-image.sh; fi
+
+# null change
